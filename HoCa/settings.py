@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'hospital',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'HoCa.urls'
@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dduu81gvkrua2e',
         'USER': 'jbvcpfauymasjb',
-        'PASSWORD': '0d8fa1eb4db503ee6581610c88d4a124da76a5839c0f648aec80ee01bcc968c5',
+        'PASSWORD': '3fcdd0618d91eebfb3857d33490fc541de0c45c030794fee9d7c4f07665e4ecc',
         'HOST': 'ec2-34-199-68-114.compute-1.amazonaws.com',
         'PORT': '5432',
     }
