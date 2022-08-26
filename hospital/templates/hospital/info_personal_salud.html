@@ -1,0 +1,16 @@
+{% load rest_framework %}
+
+<html><body>
+
+<h1>{{personal_salud.cargo}} - {{ personal_salud.nombre }}</h1>
+<form action="{% url 'info_personal_salud' pk=personal_salud.pk %}" method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input type="submit" value="Save">
+</form>
+
+<h1> Pacientes</h1>
+{% for paciente in  pacientes %}
+    <p>Paciente: <a href="{% url 'info_paciente' paciente.id %}">{{paciente.nombre}}</a><p>
+{% endfor %}
+</body></html>

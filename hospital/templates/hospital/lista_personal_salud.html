@@ -1,0 +1,9 @@
+{% comment %} {% extends 'hospital/base.html' %} {% endcomment %}
+    {% block content %}
+    <h1>Lista de Personal de Salud</h1>
+    <ul>
+        {% for persona in personal_salud %}
+            <li><a href="{% url 'info_personal_salud' personal_salud.id %}">{{ persona.nombre }}, {{persona.edad}} años</a></li>
+        {% endfor %}
+    </ul>
+    {% endblock content %}

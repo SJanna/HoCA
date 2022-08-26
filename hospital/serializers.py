@@ -1,12 +1,14 @@
 from hospital import views
 from rest_framework import serializers
-from .models import Medico,Paciente,HistoriaPaciente,SignosVitales
+from .models import PersonalSalud,Paciente,HistoriaPaciente,SignosVitales
 from django.contrib.auth.models import User
 
-class MedicoSerilizer(serializers.ModelSerializer):
+class PersonalSaludSerilizer(serializers.ModelSerializer):
+    pacientes=serializers.SlugRelatedField(many=True, read_only=True, slug_field='nombre')
     class Meta:
-        model = Medico
-        fields = '__all__'
+        model = PersonalSalud
+        #fields= '__all__'
+        exclude = ('cargo',)
 
 class PacienteSerilizer(serializers.ModelSerializer):
     class Meta:

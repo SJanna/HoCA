@@ -9,21 +9,25 @@ class TimeStampMixin(models.Model):
     class Meta:
         abstract = True
 
-class Medico(TimeStampMixin):
+class PersonalSalud(TimeStampMixin):
     usuario = models.OneToOneField(User,related_name='usuario_medico', on_delete=models.CASCADE)
+    nombre=models.CharField(max_length=50)
     edad=models.IntegerField()
     direccion=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
+    CARGO = [
+        ('MEDICO', 'Medico'),
+        ('ENFERMERO', 'Enfermero'),]
+    cargo=models.CharField(max_length=9, choices=[('MEDICO','Medico'),('ENFERMERO','Enfermero')])
 
     class Meta:
-        verbose_name = "Medico"
-        verbose_name_plural = "Medicos"
+        verbose_name = "PersonalSalud"
 
     def __str__(self):
-        return self.name
+        return self.usuario.username
 
     def get_absolute_url(self):
-        return reverse("Medico_detail", kwargs={"pk": self.pk})
+        return reverse("PersonalSalud_detail", kwargs={"pk": self.pk})
 
 class SignosVitales(TimeStampMixin):
     oximetria=models.IntegerField(blank=True, null=True)
@@ -37,9 +41,6 @@ class SignosVitales(TimeStampMixin):
     class Meta:
         verbose_name = "SignosVitales"
 
-    def __str__(self):
-        return self.name
-
     def get_absolute_url(self):
         return reverse("SignosVitales_detail", kwargs={"pk": self.pk})
 
@@ -47,16 +48,13 @@ class Paciente(TimeStampMixin):
     usuario=models.OneToOneField(User,related_name='usuario_paciente', on_delete=models.CASCADE)
     nombre=models.CharField(max_length=30)
     direccion=models.CharField(max_length=30)
-    medico=models.ForeignKey(Medico,default="Medico no asignado", related_name='mi_medico_asignado', on_delete=models.SET_DEFAULT)
+    personal_salud=models.ForeignKey(PersonalSalud,default="Personal no asignado", related_name='pacientes', on_delete=models.SET_DEFAULT)
     signos_vitales=models.ForeignKey(SignosVitales, related_name='mis_signos_vitales', on_delete=models.CASCADE)
     
 
     class Meta:
         verbose_name = "Paciente"
         verbose_name_plural = "Pacientes"
-
-    def __str__(self):
-        return self.name
 
     def get_absolute_url(self):
         return reverse("Paciente_detail", kwargs={"pk": self.pk})
@@ -70,8 +68,23 @@ class HistoriaPaciente(TimeStampMixin):
         verbose_name = "HistoriaPaciente"
         verbose_name_plural = "HistoriaPacientes"
 
-    def __str__(self):
-        return self.name
-
     def get_absolute_url(self):
         return reverse("HistoriaPaciente_detail", kwargs={"pk": self.pk})
+
+class auxiliar(TimeStampMixin):
+
+    usuario = models.OneToOneField(User,related_name='usuario_auxiliar', on_delete=models.CASCADE)
+    nombre=models.CharField(max_length=50)
+    edad=models.IntegerField()
+    direccion=models.CharField(max_length=50)
+    telefono=models.CharField(max_length=13)
+
+    class Meta:
+        verbose_name = "Auxiliar"
+        verbose_name_plural = "Auxiliares"
+
+    def __str__(self):
+        return self.nombre
+
+    def get_absolute_url(self):
+        return reverse("Auxiliar_detail", kwargs={"pk": self.pk})
