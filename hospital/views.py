@@ -1,5 +1,5 @@
-from .models import UsuarioFamiliar,UsuarioPaciente,UsuarioPsalud,Familiar, PersonalSalud,Paciente,HistoriaPaciente,SignosVitales
-from .serializers import PersonalSaludSerilizer,PacienteSerilizer,HistoriaPacienteSerilizer,SignosVitalesSerilizer,FamiliarSerializer, UserSerializer, UsuarioPacienteSerializer, UsuarioPsaludSerializer
+from .models import Familiar, PersonalSalud,Paciente,HistoriaPaciente,SignosVitales
+from .serializers import PersonalSaludSerilizer,PacienteSerilizer,HistoriaPacienteSerilizer,SignosVitalesSerilizer,FamiliarSerializer, UserSerializer
 from django.contrib.auth.models import User
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -92,10 +92,6 @@ class SignosVitales(APIView):
         signos_vitales.save()
 
 
-
-
-
-
 #ViewSets
 class HistoriaPacienteViewSet(viewsets.ModelViewSet):
     """
@@ -104,13 +100,15 @@ class HistoriaPacienteViewSet(viewsets.ModelViewSet):
     """
     queryset = HistoriaPaciente.objects.all()
     serializer_class = HistoriaPacienteSerilizer
-    permission_classes = [IsAuxiliar]
+    permission_classes = [permissions.IsAdminUser]
+    search_fields = ['paciente', 'personal_salud']
+    ordering_fields = '__all__'
 
 class PacienteViewSet(viewsets.ModelViewSet):
     """
     Permite  `crear`, `borrar`, `actualizar` y `visualizar` la información de los pacientes
     """
-    permission_classes = [IsAuxiliar]
+    permission_classes = [IsAuxiliar | permissions.IsAdminUser]
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerilizer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
@@ -119,7 +117,7 @@ class PacienteViewSet(viewsets.ModelViewSet):
 
 class PersonalSaludViewSet(viewsets.ModelViewSet):
     
-    permission_classes = [IsAuxiliar]
+    permission_classes = [IsAuxiliar | permissions.IsAdminUser]
     queryset = PersonalSalud.objects.all()
     serializer_class = PersonalSaludSerilizer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
@@ -127,37 +125,15 @@ class PersonalSaludViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
     
 class FamiliarViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]    
+    permission_classes = [IsAuxiliar | permissions.IsAdminUser]    
     queryset = Familiar.objects.all()
     serializer_class = FamiliarSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['nombre', 'apellidos','numero_id']
     ordering_fields = '__all__'
 
-class UsuarioPacienteViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]    
-    queryset = UsuarioPaciente.objects.all()
-    serializer_class = UsuarioPacienteSerializer
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['created_at','updated_at']
-    ordering_fields = '__all__'
-
-class UsuarioPsaludViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]   
-    queryset = UsuarioPsalud.objects.all()
-    serializer_class = UsuarioPsaludSerializer
-    search_fields = ['created_at','updated_at']
-    ordering_fields = '__all__'
-
-class UsuarioFamiliarViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]
-    queryset = UsuarioFamiliar.objects.all()
-    serializer_class = UsuarioFamiliar
-    search_fields = ['created_at','updated_at']
-    ordering_fields = '__all__'
-
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]
+    permission_classes = [IsAuxiliar | permissions.IsAdminUser]
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
@@ -165,7 +141,7 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
 class PersonalSaludViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuxiliar]
+    permission_classes = [IsAuxiliar | permissions.IsAdminUser]
     queryset = PersonalSalud.objects.all()
     serializer_class = PersonalSaludSerilizer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]

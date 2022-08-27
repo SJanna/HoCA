@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 # Create your models here.
 class TimeStampMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -9,24 +10,10 @@ class TimeStampMixin(models.Model):
     class Meta:
         abstract = True
 
-class UsuarioPaciente(TimeStampMixin):
-    usuario=models.OneToOneField(User,related_name='usuario_paciente', on_delete=models.CASCADE)
-    def __str__(self):
-        return self.usuario.username
-
-class UsuarioPsalud(TimeStampMixin):
-    usuario=models.OneToOneField(User,related_name='usuario_personal_salud', on_delete=models.CASCADE)
-    def __str__(self):
-        return self.usuario.username
-
-class UsuarioFamiliar(TimeStampMixin):
-    usuario=models.OneToOneField(User,related_name='usuario_familiar', on_delete=models.CASCADE)
-    def __str__(self):
-        return self.usuario.username
-
 class PersonalSalud(TimeStampMixin):
     numero_id=models.IntegerField()
-    usuario = models.OneToOneField(UsuarioPsalud,related_name='usuario_p_salud', on_delete=models.CASCADE, null=True, blank=True)
+    group_id=Group.objects.get(name='personal_salud')
+    usuario = models.OneToOneField(User,related_name='usuario_p_salud', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
@@ -49,7 +36,8 @@ class PersonalSalud(TimeStampMixin):
 
 class Paciente(TimeStampMixin):
     numero_id=models.IntegerField()
-    usuario=models.OneToOneField(UsuarioPaciente,related_name='paciente_usuario', on_delete=models.CASCADE, blank=True, null=True)
+    group_id=Group.objects.get(name='pacientes')
+    usuario=models.OneToOneField(User,related_name='paciente_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, blank=True, null=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     direccion=models.CharField(max_length=30)
@@ -99,7 +87,8 @@ class SignosVitales(TimeStampMixin):
 
 class auxiliar(TimeStampMixin):
     numero_id=models.IntegerField()
-    usuario = models.OneToOneField(User,related_name='usuario_auxiliar', on_delete=models.CASCADE, null=True, blank=True)
+    group_id=Group.objects.get(name='auxiliares')
+    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':group_id}, on_delete=models.CASCADE, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
@@ -117,7 +106,8 @@ class auxiliar(TimeStampMixin):
 
 class Familiar(TimeStampMixin):
     numero_id=models.IntegerField()
-    usuario=models.OneToOneField(UsuarioFamiliar,related_name='familiar_usuario', on_delete=models.CASCADE, blank=True, null=True)
+    group_id=Group.objects.get(name='familiares')
+    usuario=models.OneToOneField(User,related_name='familiar_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, blank=True, null=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
