@@ -13,9 +13,21 @@ class IsMedicoOwner(permissions.BasePermission):
         return obj.usuario == request.user
 
 class IsAuxiliar(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return obj.usuario == request.user
-            # Check permissions for write requesty
-        return obj.usuario == request.user
- 
+    def has_permission(self, request, view):
+        if request.method not in permissions.SAFE_METHODS:
+            return False
+
+        group_name ='auxiliares'
+        if request.user.groups.filter(name__exact=group_name).exists():
+            return True
+
+        return False
+
+
+#Corregir permisos 
+class IsPersonalSalud(permissions.BasePermission):
+    def has_permission(self, request, view):
+        group_name ='personal_salud'
+        if request.user.groups.filter(name__exact=group_name).exists() and request.method in permissions.SAFE_METHODS:
+            return True
+        return True
