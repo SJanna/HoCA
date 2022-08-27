@@ -2,13 +2,25 @@
 
 <html><body>
 {% if user.id == paciente.usuario.id%}
-{{user.id}}
-{{paciente.usuario.id}}
+Usuario:{{user.id}}
+Paciente:{{paciente.usuario.id}}
+
+<form action="{% url 'info_paciente' pk=paciente.pk %}" method="POST">
+    {% csrf_token %}
+    {% render_form paciente %}
+    <input type="submit" value="Save">
+</form>
+
+<h2> Signos Vitales</h2>
+<form action="{% url 'info_paciente' pk=paciente.pk %}" method="POST">
+    {% csrf_token %}
+    {% render_form signos_vitales %}
+    <input type="submit" value="Save">
+</form>
+
 {% else %}
-NO SOY EL PACIENTE
-{{user.id}}
-{{paciente.usuario.id}}
-{% endif %}
+Usuario:{{user.id}}
+Paciente:{{paciente.usuario.id}}
 <p>Personal Asignado: {{ paciente.personal_salud.nombre }}<p>
 <p>Nombre: {{paciente.nombre}}</p>
 <p>Edad: {{paciente.edad}}</p>
@@ -23,5 +35,5 @@ NO SOY EL PACIENTE
 <p>Frecuencia_Cardiaca:{{paciente.signos_vitales.frecuencia_cardiaca}}</p>
 <p>Oximetría:{{paciente.signos_vitales.oximetria}}</p>
 <p>Frecuencia_Cardiaca:{{paciente.signos_vitales.frecuencia_cardiaca}}</p>
-</form>
+{% endif %}
 </body></html>
