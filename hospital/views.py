@@ -7,10 +7,12 @@ from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsMedicoOwner
 from rest_framework import viewsets
+from rest_framework import generics
+import django_filters.rest_framework
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from django.shortcuts import get_object_or_404, redirect, render
-
+from rest_framework import filters
 from hospital import serializers
 
 # Create your views here.
@@ -70,13 +72,14 @@ class InfoPaciente(APIView):
         paciente.save()
         return redirect('lista_personal_salud')
 
-class PacienteViewSet(viewsets.ModelViewSet):
+class PacienteViewSet(generics.ListAPIView):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerilizer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
 class HistoriaPacienteViewSet(viewsets.ModelViewSet):
     """
@@ -111,33 +114,56 @@ class PacienteViewSet(viewsets.ModelViewSet):
     """
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerilizer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['nombre', 'apellidos','numero_id']
+    ordering_fields = '__all__'
 
 class PersonalSaludViewSet(viewsets.ModelViewSet):
     
     queryset = PersonalSalud.objects.all()
     serializer_class = PersonalSaludSerilizer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['nombre', 'apellidos','numero_id']
+    ordering_fields = '__all__'
     
 class FamiliarViewSet(viewsets.ModelViewSet):
     
     queryset = Familiar.objects.all()
     serializer_class = FamiliarSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['nombre', 'apellidos','numero_id']
+    ordering_fields = '__all__'
 
 class UsuarioPacienteViewSet(viewsets.ModelViewSet):
     queryset = UsuarioPaciente.objects.all()
     serializer_class = UsuarioPacienteSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['created_at','updated_at']
+    ordering_fields = '__all__'
 
 class UsuarioPsaludViewSet(viewsets.ModelViewSet):
     queryset = UsuarioPsalud.objects.all()
     serializer_class = UsuarioPsaludSerializer
+    search_fields = ['created_at','updated_at']
+    ordering_fields = '__all__'
 
 class UsuarioFamiliarViewSet(viewsets.ModelViewSet):
     queryset = UsuarioFamiliar.objects.all()
     serializer_class = UsuarioFamiliar
+    search_fields = ['created_at','updated_at']
+    ordering_fields = '__all__'
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['username', 'email']
+    ordering_fields = '__all__'
 
 class PersonalSaludViewSet(viewsets.ModelViewSet):
     queryset = PersonalSalud.objects.all()
     serializer_class = PersonalSaludSerilizer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['nombre', 'apellidos','numero_id']
+    ordering_fields = '__all__'
+

@@ -11,3 +11,11 @@ class IsMedicoOwner(permissions.BasePermission):
             return obj.usuario == request.user
             # Check permissions for write requesty
         return obj.usuario == request.user
+
+class IsAuxiliar(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return obj.usuario == request.user
+            # Check permissions for write requesty
+        return obj.usuario == request.user
+ 
