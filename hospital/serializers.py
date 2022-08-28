@@ -6,7 +6,7 @@ class PersonalSaludSerilizer(serializers.HyperlinkedModelSerializer):
     pacientes=serializers.SlugRelatedField(many=True, read_only=True, slug_field='nombre')
     class Meta:
         model = PersonalSalud
-        exclude = ('cargo',)
+        fields='__all__'
 
 class PacienteSerilizer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -18,7 +18,7 @@ class HistoriaPacienteSerilizer(serializers.HyperlinkedModelSerializer):
         model = HistoriaPaciente
         fields = '__all__'
 
-class SignosVitalesSerilizer(serializers.HyperlinkedModelSerializer):
+class SignosVitalesSerilizer(serializers.ModelSerializer):
     class Meta:
         model = SignosVitales
         fields = '__all__'
@@ -31,13 +31,13 @@ class FamiliarSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'username', 'password']
+        fields = ['id','email', 'username', 'password','groups',]
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
+    def create(self, validated_data): #Para cifrar la contraseña
         user = User(
             email=validated_data['email'],
-            username=validated_data['username']
+            username=validated_data['username'],
         )
         user.set_password(validated_data['password'])
         user.save()

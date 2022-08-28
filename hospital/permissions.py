@@ -1,7 +1,7 @@
 from rest_framework import permissions
 from rest_framework.permissions import SAFE_METHODS
 
-class IsMedicoOwner(permissions.BasePermission):
+class IsOwner(permissions.BasePermission):
     message = 'Only the Owner has access.'
     """
     las empresas solo podran ver a la información vinculada a su usuario
@@ -19,10 +19,9 @@ class IsAuxiliar(permissions.BasePermission):
             return request.user.groups.filter(name__exact=group_name).exists()
         return request.user.groups.filter(name__exact=group_name).exists()
 
-#Corregir permisos 
 class IsPersonalSalud(permissions.BasePermission):
-    def has_permission_object(self, request, view):
+    def has_permission(self, request, view):
         group_name ='personal_salud'
-        if request.user.groups.filter(name__exact=group_name).exists() and request.method in permissions.SAFE_METHODS:
-            return True
-        return True
+        if request.method in permissions.SAFE_METHODS:
+            return request.user.groups.filter(name__exact=group_name).exists()
+        return request.user.groups.filter(name__exact=group_name).exists()

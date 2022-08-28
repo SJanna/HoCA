@@ -12,13 +12,12 @@ class TimeStampMixin(models.Model):
 
 class PersonalSalud(TimeStampMixin):
     numero_id=models.IntegerField()
-    group_id=Group.objects.get(name='personal_salud')
-    usuario = models.OneToOneField(User,related_name='usuario_p_salud', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, null=True, blank=True)
+    usuario = models.OneToOneField(User,related_name='usuario_p_salud', on_delete=models.CASCADE,limit_choices_to={'groups':2}, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
     especialidad=models.CharField(max_length=50)
-    registro=models.FileField(upload_to =f'hospital/registros/')
+    registro=models.FileField(upload_to ='hospital/registros/',blank=True,null=True)
     genero=models.CharField(choices=[('MASCULINO','M'),('FEMENINO','F'),('No Binario','NB'),] ,max_length=10)
     CARGO = [
         ('MEDICO', 'Medico'),
@@ -36,11 +35,10 @@ class PersonalSalud(TimeStampMixin):
 
 class Paciente(TimeStampMixin):
     numero_id=models.IntegerField()
-    group_id=Group.objects.get(name='pacientes')
-    usuario=models.OneToOneField(User,related_name='paciente_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, blank=True, null=True)
+    usuario=models.OneToOneField(User,related_name='paciente_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':3}, blank=True, null=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
-    direccion=models.CharField(max_length=30)
+    direccion=models.CharField(max_length=100)
     ciudad=models.CharField(max_length=30)
     fecha_nacimiento=models.DateField(max_length=30)
     telefono=models.CharField(max_length=13)
@@ -78,6 +76,8 @@ class SignosVitales(TimeStampMixin):
     glicemias=models.IntegerField(blank=True, null=True)
     paciente=models.ForeignKey(Paciente, related_name='mis_signos_vitales', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return "Signos Vitales " + str(self.id)
 
     class Meta:
         verbose_name = "SignosVitales"
@@ -87,8 +87,8 @@ class SignosVitales(TimeStampMixin):
 
 class auxiliar(TimeStampMixin):
     numero_id=models.IntegerField()
-    group_id=Group.objects.get(name='auxiliares')
-    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':group_id}, on_delete=models.CASCADE, null=True, blank=True)
+    #group_id=Group.objects.get(name='auxiliares')
+    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':1}, on_delete=models.CASCADE, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
@@ -106,8 +106,8 @@ class auxiliar(TimeStampMixin):
 
 class Familiar(TimeStampMixin):
     numero_id=models.IntegerField()
-    group_id=Group.objects.get(name='familiares')
-    usuario=models.OneToOneField(User,related_name='familiar_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':group_id}, blank=True, null=True)
+    #group_id=Group.objects.get(name='familiares')
+    usuario=models.OneToOneField(User,related_name='familiar_usuario', on_delete=models.CASCADE,limit_choices_to={'groups':4}, blank=True, null=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)

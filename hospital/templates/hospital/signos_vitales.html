@@ -1,0 +1,15 @@
+{% load rest_framework %}
+
+<html><body>
+
+<h1> Signos Vitales de {{signos_vitales.paciente.nombre}}</h1>
+<a href="{% url 'perfil_paciente' %}">Perfil</a>
+
+{{signos_vitales.updated_at}}
+<p>Oximetría:{{signos_vitales.oximetria}}</p>
+<p>Frecuencia Cardiaca:{{signos_vitales.frecuencia_cardiaca}}</p>
+<p>Frecuencia Respiratoria:{{signos_vitales.frecuencia_respiratoria}}</p>
+<p>Temperatura:{{signos_vitales.tempreratura}}</p>
+<p>Presión Arterial:{{signos_vitales.presion_arterial}}</p>
+<p>Frecuencia_Cardiaca:{{signos_vitales.glicemias}}</p>
+</body></html>

@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import PersonalSaludViewSet,UserViewSet,FamiliarViewSet,InfoPaciente,ListaPersonalSalud,InfoPersonalSalud, PacienteViewSet, HistoriaPacienteViewSet
+from .views import SignosVitalesApi,AñadirSignosVitales,PerfilPaciente, PersonalSaludViewSet,UserViewSet,FamiliarViewSet,PerfilPersonalSalud, PacienteViewSet, HistoriaPacienteViewSet
 
 router=DefaultRouter()
 router.register
@@ -11,9 +11,11 @@ router.register(r'familiares', FamiliarViewSet)
 router.register(r'personal_salud', PersonalSaludViewSet)
 
 urlpatterns = [
-    path('lista_personal_salud/', ListaPersonalSalud.as_view(), name="lista_personal_salud"),
-    path('info_personal_salud/<pk>', InfoPersonalSalud.as_view(), name="info_personal_salud"),
-    path('info_paciente/<pk>', InfoPaciente.as_view(), name="info_paciente"),
+    path('perfil_paciente/<pk>', PerfilPaciente.as_view(), name="perfil_paciente"),
+    path('perfil_personal_salud/<pk>', PerfilPersonalSalud.as_view(), name="perfil_personal_salud"),
+    path('signos_vitales/<pk>', SignosVitalesApi.as_view(), name="signos_vitales"),
+    path('añadir_sv/', AñadirSignosVitales.as_view(), name="añadir_sv"),
+
 ]
 
 urlpatterns += router.urls
