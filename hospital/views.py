@@ -19,12 +19,13 @@ from rest_framework import status
 from django.http import Http404
 from rest_framework import generics
 
+#Funciones
 def Inicio(request):
     inicio=TemplateResponse(request,"hospital/inicio.html",{})
     return inicio
 
-# ApiViews
 
+# ApiViews
 class PerfilPaciente(APIView):
     """Solo Administradores tienen acceso a esta vista"""
     permission_classes = [IsPaciente]
@@ -70,10 +71,6 @@ class HistoriaPacienteViewSet(viewsets.ModelViewSet):
             return HistoriaPaciente.objects.all().filter(paciente=paciente)
         except:
            return  HistoriaPaciente.objects.all()
-            # usuario=self.request.user
-            # doctor=PersonalSalud.objects.get(usuario=usuario)
-            # doctor=doctor.id
-            # return  HistoriaPaciente.objects.all().filter(doctor=doctor)
 
 class PacienteViewSet(viewsets.ModelViewSet):
     """
@@ -129,7 +126,10 @@ class SignosVitalesApi(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
     def get_queryset(self, *args, **kwargs):
-        usuario=self.request.user
-        paciente=Paciente.objects.get(usuario=usuario)
-        paciente=paciente.id
-        return SignosVitales.objects.all().filter(paciente=paciente)
+        try:
+            usuario=self.request.user
+            paciente=Paciente.objects.get(usuario=usuario)
+            paciente=paciente.id
+            return SignosVitales.objects.all().filter(paciente=paciente)
+        except:
+            return SignosVitales.objects.all()
