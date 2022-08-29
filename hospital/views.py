@@ -1,3 +1,4 @@
+from django.template.response import TemplateResponse
 from .models import Familiar, PersonalSalud,Paciente,HistoriaPaciente, SignosVitales
 from .serializers import PersonalSaludSerilizer,PacienteSerilizer,HistoriaPacienteSerilizer,SignosVitalesSerilizer,FamiliarSerializer, UserSerializer
 from django.contrib.auth.models import User
@@ -19,7 +20,8 @@ from django.http import Http404
 from rest_framework import generics
 
 def Inicio(request):
-    return render(request, "hospital/inicio.html")
+    inicio=TemplateResponse(request,"hospital/inicio.html",{})
+    return inicio
 
 # ApiViews
 
