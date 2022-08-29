@@ -6,15 +6,10 @@
 <p>Personal Asignado: {{ paciente.personal_salud.nombre }}<p>
 <p>Nombre: {{paciente.nombre}}</p>
 <p>Nombre: {{paciente.apellidos}}</p>
-<p>Edad: {{paciente.edad}}</p>
 <p>Dirección: {{paciente.direccion}}</p>
 <p>Teléfono: {{paciente.telefono}}</p>
 <p>Usuario: {{paciente.usuario}}</p>
 
-<h1>Signos Vitales</h1>
-{% for elemento in signos_vitales %}
-<a href="{% url 'signos_vitales' elemento.id %} ">{{elemento}}</a><br>
-{% endfor %}
-
-<a href="{% url 'añadir_sv' %}"> Añadir</a>
+<a href="{% url 'signos_vitales-list' %}"><h1>Signos Vitales</h1></a>
+<a href="{% url 'historias-list' %}"><h1>Ver Historias</h1></a>
 </body></html>

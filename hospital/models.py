@@ -57,7 +57,7 @@ class Paciente(TimeStampMixin):
 
 class HistoriaPaciente(TimeStampMixin):
     paciente=models.ForeignKey(Paciente, related_name='paciente_historia', on_delete=models.CASCADE)
-    doctor=models.ForeignKey(Paciente, related_name='medico_historia', on_delete=models.CASCADE)
+    doctor=models.ForeignKey(PersonalSalud, related_name='medico_historia', on_delete=models.CASCADE, null=True)
     comentario=models.TextField()
 
     class Meta:
@@ -74,7 +74,7 @@ class SignosVitales(TimeStampMixin):
     tempreratura=models.IntegerField(blank=True, null=True)
     presion_arterial=models.IntegerField(blank=True, null=True)
     glicemias=models.IntegerField(blank=True, null=True)
-    paciente=models.ForeignKey(Paciente, related_name='mis_signos_vitales', on_delete=models.CASCADE)
+    paciente=models.ForeignKey(Paciente, related_name='mis_signos_vitales', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return "Signos Vitales " + str(self.id)
@@ -88,7 +88,7 @@ class SignosVitales(TimeStampMixin):
 class auxiliar(TimeStampMixin):
     numero_id=models.IntegerField()
     #group_id=Group.objects.get(name='auxiliares')
-    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':1}, on_delete=models.CASCADE, null=True, blank=True)
+    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':2}, on_delete=models.CASCADE, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)

@@ -1,11 +1,14 @@
 {% load rest_framework %}
 
 <html><body>
-
-<h1>{{personal_salud.cargo}} - {{ personal_salud.nombre }}</h1>
+<a href="{% url 'inicio' %}">Inicio</a><br>
+<h1>Personal de Salud - {{ personal_salud.nombre }}</h1>
 
 <h1> Pacientes</h1>
 {% for paciente in  pacientes %}
-    <p>Paciente: <a href="{% url 'info_paciente' paciente.id %}">{{paciente.nombre}}</a><p>
+    <p>Paciente: <a href="{% url 'perfil_paciente' paciente.id %}">{{paciente.nombre}}</a><p>
 {% endfor %}
+
+<a href="{% url 'historias-list' %}">CrearHistoria</a>
+
 </body></html>

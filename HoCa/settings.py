@@ -79,7 +79,6 @@ WSGI_APPLICATION = 'HoCa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -88,13 +87,6 @@ DATABASES = {
         'PASSWORD': '3fcdd0618d91eebfb3857d33490fc541de0c45c030794fee9d7c4f07665e4ecc',
         'HOST': 'ec2-34-199-68-114.compute-1.amazonaws.com',
         'PORT': '5432',
-    }
-}
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
     }
 }
 
@@ -155,5 +147,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = '/'
 "import django_heroku" 
 "django_heroku.settings(locals())"

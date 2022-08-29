@@ -5,7 +5,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsOwner, IsAuxiliar, IsPersonalSalud
+from .permissions import IsOwner, IsAuxiliar, IsPaciente, IsPersonalSalud, VeSignosVitales, IsHistoriaPaciente
 from rest_framework import viewsets
 from rest_framework import generics
 import django_filters.rest_framework
@@ -14,83 +14,39 @@ from rest_framework.generics import CreateAPIView
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework import filters
 from hospital import serializers
+from rest_framework import status
+from django.http import Http404
+from rest_framework import generics
+
+def Inicio(request):
+    return render(request, "hospital/inicio.html")
 
 # ApiViews
+
 class PerfilPaciente(APIView):
     """Solo Administradores tienen acceso a esta vista"""
-    #permission_classes = [IsOwner]
+    permission_classes = [IsPaciente]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'hospital/perfil_paciente.html'
 
-    def get(self, request, pk):
-        paciente = get_object_or_404(Paciente, pk=pk)
-        print(paciente.nombre)
+    def get(self, request):
+        paciente = get_object_or_404(Paciente, usuario=request.user.id)
         signos_vitales = SignosVitales.objects.filter(paciente=paciente).all()
         self.check_object_permissions(self.request, paciente)
         return Response({'paciente': paciente, 'signos_vitales': signos_vitales})
 
-    
-    """ 
-   def post(self, request, pk):
-        personal_salud = get_object_or_404(PersonalSalud, pk=pk)
-        serializer_context = {
-            'request': request,
-        }
-        serializer = PersonalSaludSerilizer(personal_salud, data=request.data,context=serializer_context )
-        if not serializer.is_valid():
-            print("Serializador NO VALIDO")
-            return Response({'serializer': serializer, 'personal_salud': personal_salud})
-        serializer.save()
-        return render(request, 'hospital/perfil_personal_salud.html', {'serializer': serializer, 'personal_salud': personal_salud})
-"""
-
 class PerfilPersonalSalud(APIView):
     """Solo el personal de salud proprietario tienen acceso a esta vista"""
-    #permission_classes=[IsOwner, permissions.IsAuthenticated]
+    permission_classes=[IsPersonalSalud]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'hospital/perfil_personal_salud.html'
 
-    def get(self, request, pk):
-        personal_salud = get_object_or_404(PersonalSalud, pk=pk) #Datos del Usuario(Modelo PersonalSalud)
+    def get(self, request):
+        personal_salud = get_object_or_404(PersonalSalud, usuario=request.user.id) #Datos del Usuario(Modelo PersonalSalud)
         pacientes = Paciente.objects.filter(personal_salud=personal_salud) #Pacientes asociados al personal_salid
         self.check_object_permissions(self.request, personal_salud)
         return Response({'personal_salud': personal_salud, 'pacientes': pacientes})
 
-class SignosVitalesApi(APIView):
-     
-    permission_classes=[]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'hospital/signos_vitales.html'
-
-    def get(self, request, pk):     
-        signos_vitales = get_object_or_404(SignosVitales, pk=pk)
-        self.check_object_permissions(self.request, signos_vitales)
-        return Response({'signos_vitales': signos_vitales})
-
-class AñadirSignosVitales(APIView):
-    permission_classes=[]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'hospital/añadir_signos_vitales.html'
-
-    def get(self, request):
-        print('------------------------------GET------------------------------')
-        signos_vitales = get_object_or_404(SignosVitales)
-        signos_vitales.clean_fields(exclude='paciente')
-#añadir signos vitales
-        serializer = SignosVitalesSerilizer(signos_vitales)
-        return Response({'serializer': serializer, 'signos_vitales': signos_vitales})
-
-    def post(self, request):
-        print('---------------------POST--------------------')
-        serializer_context = {
-            'request': request,
-        }   
-        signos_vitales = get_object_or_404(SignosVitales)
-        serializer = SignosVitalesSerilizer(signos_vitales, data=request.data,context=serializer_context )
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'signos_vitales': signos_vitales})
-        serializer.save()
-        return redirect('profile-list')
 
 #ViewSets
 class HistoriaPacienteViewSet(viewsets.ModelViewSet):
@@ -100,9 +56,22 @@ class HistoriaPacienteViewSet(viewsets.ModelViewSet):
     """
     queryset = HistoriaPaciente.objects.all()
     serializer_class = HistoriaPacienteSerilizer
-    permission_classes = [permissions.IsAdminUser]
-    search_fields = ['paciente', 'personal_salud']
+    permission_classes = [permissions.IsAdminUser | IsPersonalSalud | IsHistoriaPaciente]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     ordering_fields = '__all__'
+
+    def get_queryset(self, *args, **kwargs):
+        try:
+            usuario=self.request.user
+            paciente=Paciente.objects.get(usuario=usuario)
+            paciente=paciente.id
+            return HistoriaPaciente.objects.all().filter(paciente=paciente)
+        except:
+           return  HistoriaPaciente.objects.all()
+            # usuario=self.request.user
+            # doctor=PersonalSalud.objects.get(usuario=usuario)
+            # doctor=doctor.id
+            # return  HistoriaPaciente.objects.all().filter(doctor=doctor)
 
 class PacienteViewSet(viewsets.ModelViewSet):
     """
@@ -148,3 +117,17 @@ class PersonalSaludViewSet(viewsets.ModelViewSet):
     search_fields = ['nombre', 'apellidos','numero_id']
     ordering_fields = '__all__'
 
+class SignosVitalesApi(viewsets.ModelViewSet):
+    
+    queryset = SignosVitales.objects.all()
+    serializer_class = SignosVitalesSerilizer
+    permission_classes = [permissions.IsAdminUser | IsPaciente]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['id','created_at', 'updated_at']
+    ordering_fields = '__all__'
+
+    def get_queryset(self, *args, **kwargs):
+        usuario=self.request.user
+        paciente=Paciente.objects.get(usuario=usuario)
+        paciente=paciente.id
+        return SignosVitales.objects.all().filter(paciente=paciente)
