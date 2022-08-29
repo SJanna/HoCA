@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rr4y9@p#r2t)jp%i@r41!h@vg3v&wtfsq1c)(x=*m%pz7d7f5^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://hoca-mintic.herokuapp.com']
 
 
 # Application definition
