@@ -3,7 +3,6 @@
 /venv
 __pycache__
 HoCa/static/
-HoCa/staticfiles/
 ### Django ###
 *.log
 *.pot
