@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rr4y9@p#r2t)jp%i@r41!h@vg3v&wtfsq1c)(x=*m%pz7d7f5^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'HoCa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dduu81gvkrua2e',
-        'USER': 'jbvcpfauymasjb',
-        'PASSWORD': '3fcdd0618d91eebfb3857d33490fc541de0c45c030794fee9d7c4f07665e4ecc',
-        'HOST': 'ec2-34-199-68-114.compute-1.amazonaws.com',
+        'NAME': 'd1g4k3879sdq98',
+        'USER': 'roogjrwmfnlhfa',
+        'PASSWORD': '96676997f637016017de7b391a3090764da697fce38b30d6b69ab0d662c3b02d',
+        'HOST': 'ec2-3-208-79-113.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -148,5 +148,3 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
-"import django_heroku" 
-"django_heroku.settings(locals())"
