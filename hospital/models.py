@@ -88,7 +88,7 @@ class SignosVitales(TimeStampMixin):
 class auxiliar(TimeStampMixin):
     numero_id=models.IntegerField()
     #group_id=Group.objects.get(name='auxiliares')
-    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':2}, on_delete=models.CASCADE, null=True, blank=True)
+    usuario = models.OneToOneField(User,related_name='usuario_auxiliar',limit_choices_to={'groups':1}, on_delete=models.CASCADE, null=True, blank=True)
     nombre=models.CharField(max_length=30)
     apellidos=models.CharField(max_length=50)
     telefono=models.CharField(max_length=13)
