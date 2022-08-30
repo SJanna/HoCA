@@ -8,7 +8,7 @@ class PersonalSaludSerilizer(serializers.ModelSerializer):
         model = PersonalSalud
         fields='__all__'
 
-class PacienteSerilizer(serializers.HyperlinkedModelSerializer):
+class PacienteSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Paciente
         fields= '__all__'
