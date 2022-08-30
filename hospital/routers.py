@@ -4,7 +4,7 @@ from .views import SignosVitalesApi, PersonalSaludViewSet,UserViewSet,FamiliarVi
 
 router=DefaultRouter()
 router.register(r'usuarios', UserViewSet, basename="usuarios")
-router.register(r'pacientes', PacienteViewSet)
+router.register(r'pacientes', PacienteViewSet, basename="pacientes")
 router.register(r'historias_pacientes', HistoriaPacienteViewSet, basename="historias")
 router.register(r'familiares', FamiliarViewSet)
 router.register(r'personal_salud', PersonalSaludViewSet)

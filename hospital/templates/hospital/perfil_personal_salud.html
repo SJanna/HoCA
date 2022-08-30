@@ -6,7 +6,7 @@
 
 <h1> Pacientes</h1>
 {% for paciente in  pacientes %}
-    <p>Paciente: <a href="{% url 'perfil_paciente' paciente.id %}">{{paciente.nombre}}</a><p>
+    <p>Paciente: {{paciente.nombre}}</a><p>
 {% endfor %}
 
 <a href="{% url 'historias-list' %}">CrearHistoria</a>
